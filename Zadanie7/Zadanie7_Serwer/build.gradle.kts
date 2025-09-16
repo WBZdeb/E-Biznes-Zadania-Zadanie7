@@ -4,6 +4,7 @@ plugins {
     kotlin("jvm") version "1.9.10"
     application
     kotlin("plugin.serialization") version "1.9.10"
+    id("org.jlleitschuh.gradle.ktlint") version "11.5.0"
 }
 
 repositories {
@@ -26,4 +27,12 @@ application {
 
 kotlin {
     jvmToolchain(20)
+}
+
+ktlint {
+    verbose.set(true)
+    android.set(false)
+    outputToConsole.set(true)
+    ignoreFailures.set(false) // blokuje build przy błędach
+    enableExperimentalRules.set(true)
 }
