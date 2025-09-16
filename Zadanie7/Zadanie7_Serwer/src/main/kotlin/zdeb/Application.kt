@@ -1,15 +1,22 @@
 package zdeb
 
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.server.application.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.http.*
-import io.ktor.server.plugins.cors.routing.*
-import io.ktor.server.response.*
-import io.ktor.server.request.*
-import io.ktor.server.routing.*
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.application.install
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.cors.routing.CORS
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.util.concurrent.atomic.AtomicInteger
@@ -85,7 +92,6 @@ fun Application.module() {
         }
 
         post("/payments") {
-            val payload = call.receive<PaymentPayload>()
             val id = paymentCounter.incrementAndGet()
             call.respond(PaymentResponse(true, "Payment accepted", id))
         }

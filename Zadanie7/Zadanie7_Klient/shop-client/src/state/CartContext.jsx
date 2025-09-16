@@ -1,19 +1,21 @@
 import React, { createContext, useContext, useReducer } from 'react'
+import PropTypes from 'prop-types'
 
 const CartStateContext = createContext()
 const CartDispatchContext = createContext()
 
 function cartReducer(state, action) {
     switch (action.type) {
-        case 'ADD':
+        case 'ADD': {
             // jeśli produkt już w koszyku, zwiększ ilość
             const exists = state.find(i => i.productId === action.item.productId)
             if (exists) {
                 return state.map(i =>
-                    i.productId === action.item.productId ? { ...i, quantity: i.quantity + action.item.quantity } : i
+                    i.productId === action.item.productId ? {...i, quantity: i.quantity + action.item.quantity} : i
                 )
             }
             return [...state, action.item]
+        }
         case 'REMOVE':
             return state.filter(i => i.productId !== action.productId)
         case 'UPDATE':
@@ -34,6 +36,10 @@ export function CartProvider({ children }) {
             </CartDispatchContext.Provider>
         </CartStateContext.Provider>
     )
+}
+
+CartProvider.propTypes = {
+    children: PropTypes.node.isRequired,
 }
 
 export function useCart() {
